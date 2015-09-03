@@ -11,7 +11,7 @@ namespace wedfromass2
 {
     public partial class WebForm1 : System.Web.UI.Page
     {
-        private string constr = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\trungnguyen\\Desktop\\wedfromass2\\wedfromass2\\App_Data\\Database1.mdf;Integrated Security=True";
+        private string constr = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\trungnguyen\\Desktop\\MVCMyClass\\WebApplication4\\WebApplication4\\App_Data\\ManageStore.mdf;Integrated Security=True";
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!this.IsPostBack)
@@ -57,10 +57,13 @@ namespace wedfromass2
                 string ShortDescription = txtaddShortDescription.Text;
                 string LongDescription = TxtaddLongDescription.Text;
                 string Price = TxtappPrice.Text;
+                string Quantity = TxtappQuantity.Text;
                 string ImageUrl = TxtappImageUrl.Text;
                 double n;
-                bool isNumber = double.TryParse(Price, out n);
-                if (Title == null || CategoryID == 0 || ShortDescription == null || LongDescription == null || isNumber == false) { validation.Text = "Please check input"; }
+                bool isPriceNumber = double.TryParse(Price, out n);
+                bool isQuantityNumber = double.TryParse(Quantity, out n);
+                if (Title == null || Price == null || Quantity == null || ImageUrl == null || CategoryID == 0 || ShortDescription == null || LongDescription == null || isPriceNumber == false || isQuantityNumber == false) 
+                { validation.Text = "Please check input"; }
                 else
                 {
                     using (SqlConnection con = new SqlConnection(constr))
@@ -74,6 +77,7 @@ namespace wedfromass2
                             cmd.Parameters.AddWithValue("@ShortDescription", ShortDescription);
                             cmd.Parameters.AddWithValue("@LongDescription", LongDescription);
                             cmd.Parameters.AddWithValue("@Price", Price);
+                            cmd.Parameters.AddWithValue("@Quantity", Quantity);
                             cmd.Parameters.AddWithValue("@ImageUrl", ImageUrl);
                             cmd.Connection = con;
                             con.Open();
@@ -82,6 +86,13 @@ namespace wedfromass2
                         }
                     }
                     this.BindGrid();
+                    validation.Text = "Add Successfull";
+                    TxtaddLongDescription.Text = "";
+                    txtaddShortDescription.Text = "";
+                    txtaddTitle.Text = "";
+                    TxtappImageUrl.Text = "";
+                    TxtappPrice.Text = "";
+                    TxtappQuantity.Text = "";
                 }
             }
 
@@ -104,6 +115,7 @@ namespace wedfromass2
             string LongDescription = (row.FindControl("txtLongDescription") as TextBox).Text;
             string ImageUrl = (row.FindControl("txtImageUrl") as TextBox).Text;
             string Price = (row.FindControl("txtPrice") as TextBox).Text;
+            string Quantity = (row.FindControl("txtQuantity") as TextBox).Text;
             using (SqlConnection con = new SqlConnection(constr))
             {
                 using (SqlCommand cmd = new SqlCommand("Product_CRUD"))
@@ -111,11 +123,11 @@ namespace wedfromass2
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@Action", "UPDATE");
                     cmd.Parameters.AddWithValue("@ProductID", ProductID);
-
                     cmd.Parameters.AddWithValue("@Title", Title);
                     cmd.Parameters.AddWithValue("@ShortDescription", ShortDescription);
                     cmd.Parameters.AddWithValue("@LongDescription", LongDescription);
                     cmd.Parameters.AddWithValue("@Price", Price);
+                    cmd.Parameters.AddWithValue("@Quantity", Quantity);
                     cmd.Parameters.AddWithValue("@ImageUrl", ImageUrl);
                     cmd.Connection = con;
                     con.Open();

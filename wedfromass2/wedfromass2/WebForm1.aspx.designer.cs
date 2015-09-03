@@ -103,6 +103,15 @@ namespace wedfromass2 {
         protected global::System.Web.UI.WebControls.TextBox TxtappPrice;
         
         /// <summary>
+        /// TxtappQuantity control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TxtappQuantity;
+        
+        /// <summary>
         /// btnAdd control.
         /// </summary>
         /// <remarks>

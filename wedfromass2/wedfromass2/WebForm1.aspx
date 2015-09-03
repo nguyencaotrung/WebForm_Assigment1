@@ -75,6 +75,16 @@
 
 <ItemStyle Width="150px"></ItemStyle>
                     </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Quantity" ItemStyle-Width="150">
+                        <ItemTemplate>
+                            <asp:Label ID="lblQuantity" runat="server" Text='<%# Eval("Quantity") %>'></asp:Label>
+                        </ItemTemplate>
+                        <EditItemTemplate>
+                            <asp:TextBox ID="txtQuantity" runat="server" Text='<%# Eval("Quantity") %>'></asp:TextBox>
+                        </EditItemTemplate>
+
+<ItemStyle Width="150px"></ItemStyle>
+                    </asp:TemplateField>
                     <asp:TemplateField>
                         <ItemTemplate>
                             <asp:Button ID="btn_Edit" runat="server" Text="Edit" CommandName="Edit" />
@@ -128,6 +138,12 @@
                      <td style="width: 150px">Price:<br />
                         <asp:TextBox ID="TxtappPrice" runat="server" Width="140" />
                     </td>
+
+                      <td style="width: 150px">Quantity:<br />
+                        <asp:TextBox ID="TxtappQuantity" runat="server" Width="140" />
+                    </td>
+
+
                     <td style="width: 100px">
                         <asp:Button ID="btnAdd" CausesValidation="False" runat="server" Text="Add" OnClick="Insert" />
                     </td>
@@ -136,7 +152,7 @@
 
              <asp:DropDownList runat="server" ID="dropdown2"></asp:DropDownList>
             <asp:Button runat="server" ID="ButtonDelete" Text="Delete" OnClick="ButtonDelete_Click"></asp:Button>
-            <asp:Label ID="validation" runat="server" Text="aaaaaaaaaaaa"></asp:Label>
+            <asp:Label ID="validation" runat="server" Text=""></asp:Label>
             
         </div>
     </form>
