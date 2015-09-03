@@ -63,9 +63,14 @@ namespace wedfromass2
                 bool isPriceNumber = double.TryParse(Price, out n);
                 bool isQuantityNumber = double.TryParse(Quantity, out n);
                 if (Title == null || Price == null || Quantity == null || ImageUrl == null || CategoryID == 0 || ShortDescription == null || LongDescription == null || isPriceNumber == false || isQuantityNumber == false) 
-                { validation.Text = "Please check input"; }
-                else
+                { 
+                    validation.Text = "Please check input";
+                }
+                else if (double.Parse(Price) <= 0 || double.Parse(Quantity) <= 0)
                 {
+                    validation.Text = "Please enter positive number";
+                }
+                else{
                     using (SqlConnection con = new SqlConnection(constr))
                     {
                         using (SqlCommand cmd = new SqlCommand("Product_CRUD"))
@@ -85,7 +90,7 @@ namespace wedfromass2
                             con.Close();
                         }
                     }
-                    this.BindGrid();
+                    
                     validation.Text = "Add Successfull";
                     TxtaddLongDescription.Text = "";
                     txtaddShortDescription.Text = "";
@@ -93,6 +98,7 @@ namespace wedfromass2
                     TxtappImageUrl.Text = "";
                     TxtappPrice.Text = "";
                     TxtappQuantity.Text = "";
+                    this.BindGrid();
                 }
             }
 
@@ -109,34 +115,55 @@ namespace wedfromass2
         {
             GridViewRow row = GridView1.Rows[e.RowIndex];
             int ProductID = Convert.ToInt32(GridView1.DataKeys[e.RowIndex].Values[0]);
-
+            
             string Title = (row.FindControl("txtTitle") as TextBox).Text;
             string ShortDescription = (row.FindControl("txtShortDescription") as TextBox).Text;
             string LongDescription = (row.FindControl("txtLongDescription") as TextBox).Text;
             string ImageUrl = (row.FindControl("txtImageUrl") as TextBox).Text;
             string Price = (row.FindControl("txtPrice") as TextBox).Text;
             string Quantity = (row.FindControl("txtQuantity") as TextBox).Text;
-            using (SqlConnection con = new SqlConnection(constr))
+            double n;
+            bool isPriceNumber = double.TryParse(Price, out n);
+            bool isQuantityNumber = double.TryParse(Quantity, out n);
+            if (Title == null || Price == null || Quantity == null || ImageUrl == null || ShortDescription == null || LongDescription == null || isPriceNumber == false || isQuantityNumber == false)
             {
-                using (SqlCommand cmd = new SqlCommand("Product_CRUD"))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@Action", "UPDATE");
-                    cmd.Parameters.AddWithValue("@ProductID", ProductID);
-                    cmd.Parameters.AddWithValue("@Title", Title);
-                    cmd.Parameters.AddWithValue("@ShortDescription", ShortDescription);
-                    cmd.Parameters.AddWithValue("@LongDescription", LongDescription);
-                    cmd.Parameters.AddWithValue("@Price", Price);
-                    cmd.Parameters.AddWithValue("@Quantity", Quantity);
-                    cmd.Parameters.AddWithValue("@ImageUrl", ImageUrl);
-                    cmd.Connection = con;
-                    con.Open();
-                    cmd.ExecuteNonQuery();
-                    con.Close();
-                }
+                validation.Text = "Please check input";
             }
-            GridView1.EditIndex = -1;
-            this.BindGrid();
+            else if (double.Parse(Price) <= 0 || double.Parse(Quantity) <= 0)
+            {
+                validation.Text = "Please enter positive number";
+            }
+            else
+            {
+                using (SqlConnection con = new SqlConnection(constr))
+                {
+                    using (SqlCommand cmd = new SqlCommand("Product_CRUD"))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@Action", "UPDATE");
+                        cmd.Parameters.AddWithValue("@ProductID", ProductID);
+                        cmd.Parameters.AddWithValue("@Title", Title);
+                        cmd.Parameters.AddWithValue("@ShortDescription", ShortDescription);
+                        cmd.Parameters.AddWithValue("@LongDescription", LongDescription);
+                        cmd.Parameters.AddWithValue("@Price", Price);
+                        cmd.Parameters.AddWithValue("@Quantity", Quantity);
+                        cmd.Parameters.AddWithValue("@ImageUrl", ImageUrl);
+                        cmd.Connection = con;
+                        con.Open();
+                        cmd.ExecuteNonQuery();
+                        con.Close();
+                    }
+                }
+                GridView1.EditIndex = -1;
+                this.BindGrid();
+                validation.Text = "Add Successfull";
+                TxtaddLongDescription.Text = "";
+                txtaddShortDescription.Text = "";
+                txtaddTitle.Text = "";
+                TxtappImageUrl.Text = "";
+                TxtappPrice.Text = "";
+                TxtappQuantity.Text = "";
+            }
         }
 
 
